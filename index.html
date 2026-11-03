@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مبادرة خطوة بلا ضغط 💻🌸 - الكلية التقنية الرقمية للبنات بتبوك</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            min-height: 100vh;
+            color: #f8fafc;
+            background: radial-gradient(circle at center, #bf009f 0%, #5935d0 55%, #532eee 100%);
+            background-attachment: fixed;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        }
+
+        .glass-card-light {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 20px 40px rgba(191, 0, 159, 0.25);
+        }
+    </style>
+</head>
+<body class="relative min-h-screen flex flex-col justify-between selection:bg-pink-500 selection:text-white">
+
+    <!-- Graphics Layer -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-25">
+        <i class="fa-solid fa-laptop-code text-pink-300 text-6xl absolute top-12 left-10 animate-float"></i>
+        <i class="fa-solid fa-robot text-purple-200 text-7xl absolute top-1/4 right-12 animate-float"></i>
+        <i class="fa-solid fa-microchip text-teal-300 text-5xl absolute bottom-20 left-16 animate-float"></i>
+        <i class="fa-solid fa-code text-blue-300 text-8xl absolute bottom-1/3 right-1/4 animate-float"></i>
+        <i class="fa-solid fa-atom text-pink-200 text-7xl absolute top-12 right-1/3 animate-float"></i>
+        <i class="fa-solid fa-desktop text-cyan-200 text-6xl absolute top-1/2 left-12 animate-float"></i>
+        <i class="fa-solid fa-star text-yellow-300 text-3xl absolute top-1/3 left-1/3 animate-pulse"></i>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="relative z-10 w-full p-4 lg:p-6 border-b border-white/20 glass-card">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            
+            <div class="flex items-center justify-start w-full md:w-auto">
+                <img src="tvtc-logo.png" alt="المؤسسة العامة للتدريب التقني والمهني" class="h-12 md:h-16 object-contain filter drop-shadow-md bg-white/95 p-1.5 rounded-xl">
+            </div>
+
+            <div class="text-center space-y-1 my-2 md:my-0">
+                <h1 class="text-2xl lg:text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-pink-200 via-white to-purple-200">
+                    مبادرة خطوة بلا ضغط 💻🌸
+                </h1>
+                <p class="text-xs lg:text-sm text-pink-100 font-bold">
+                    الكلية التقنية الرقمية للبنات بتبوك | قسم الحاسب وتقنية المعلومات
+                </p>
+            </div>
+
+            <div class="flex items-center justify-end w-full md:w-auto">
+                <button onclick="openAdminAuthModal()" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs lg:text-sm font-bold border border-white/30 transition-all flex items-center gap-2 hover:scale-105 active:scale-95 shadow-md">
+                    <i class="fa-solid fa-user-gear text-pink-300"></i>
+                    <span>لوحة المدربة Amal</span>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="relative z-10 flex-grow max-w-5xl w-full mx-auto p-4 lg:p-8 my-4">
+
+        <!-- VIEW 1: STUDENT ENTRY VIEW -->
+        <section id="homeView" class="space-y-8 text-center">
+            <div class="glass-card p-6 lg:p-10 rounded-3xl relative overflow-hidden text-right border border-pink-400/30 shadow-2xl">
+                <div class="max-w-3xl mx-auto text-center space-y-4">
+                    <span class="px-4 py-1.5 rounded-full text-xs font-extrabold bg-white/20 text-pink-100 border border-white/30 inline-block animate-pulse">
+                        💻 أهلاً بكِ في الكلية التقنية الرقمية للبنات بتبوك!
+                    </span>
+                    <h2 class="text-2xl lg:text-4xl font-black leading-relaxed text-white">
+                        سجلي بياناتكِ لفتح صندوقكِ التقني المغلق واستلام رسالتكِ ونصحيتكِ المخصصة بكل سهولة.
+                    </h2>
+                    <p class="text-pink-100 text-sm lg:text-base leading-loose">
+                        لا ضغط ولا قلق.. نحن هنا لنصنع معاً مستقبلاً رقمياً مشرقاً وهادئاً ✨
+                    </p>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 lg:p-8 rounded-3xl max-w-xl mx-auto space-y-6 border border-pink-300/30">
+                <div class="text-center space-y-2">
+                    <h3 class="text-xl font-extrabold text-white flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-box-archive text-yellow-300"></i>
+                        <span>دخول متدربات قسم الحاسب وتقنية المعلومات</span>
+                    </h3>
+                    <p class="text-xs text-pink-100">أدخلي اسمكِ ورقمكِ التدريبي للمتابعة</p>
+                </div>
+
+                <div class="space-y-4 text-right">
+                    <div>
+                        <label class="block text-xs font-bold text-pink-100 mb-2">اسم المتدربة الثلاثي:</label>
+                        <input type="text" id="studentNameInput" placeholder="اكتبي اسمكِ الثلاثي هنا..." class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-pink-400/40 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-400 text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-pink-100 mb-2">الرقم التدريبي:</label>
+                        <input type="text" id="studentCodeInput" placeholder="أدخلي الرقم التدريبي..." class="w-full text-center tracking-widest text-lg font-black px-4 py-3 rounded-xl bg-slate-900/80 border border-pink-400/40 text-yellow-300 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-pink-400">
+                    </div>
+
+                    <button onclick="handleStudentLogin()" class="w-full py-4 rounded-xl bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 text-white font-extrabold text-base shadow-lg shadow-purple-600/40 hover:opacity-95 transition-all flex items-center justify-center gap-2">
+                        <span>انتقلي لفتح الصندوق التقني</span>
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 2: UNOPENED GIFT BOX STAGE -->
+        <section id="giftStageView" class="hidden space-y-8 text-center">
+            <div class="glass-card p-8 lg:p-12 rounded-3xl max-w-2xl mx-auto space-y-8 border border-yellow-400/30 text-center relative">
+                <div class="inline-block px-4 py-2 rounded-full bg-pink-500/30 text-pink-100 font-bold text-sm border border-pink-400/40">
+                    ✨ أهلاً بكِ يا نجمة التقنية: <span id="currentStudentNameDisplay" class="text-yellow-300 underline font-black"></span>
+                </div>
+
+                <div class="space-y-3">
+                    <h3 class="text-2xl lg:text-3xl font-black text-white">رسالتكِ الخاصة تنتظركِ يا نجمة الحاسب الآلي 🎁💻</h3>
+                    <p class="text-sm text-pink-100">اضغطي على الصندوق التقني المغلق بالأسفل لاكتشاف رسالتكِ ونصحيتكِ.</p>
+                </div>
+
+                <div class="relative my-8 flex justify-center">
+                    <div id="giftBoxIcon" class="w-36 h-36 lg:w-44 lg:h-44 rounded-3xl bg-gradient-to-tr from-pink-600 via-purple-600 to-indigo-600 flex items-center justify-center shadow-2xl shadow-pink-500/40 animate-float cursor-pointer hover:scale-105 transition-transform border-4 border-yellow-300/60" onclick="revealMessageWithEffects()">
+                        <i class="fa-solid fa-gift text-6xl lg:text-7xl text-yellow-300"></i>
+                    </div>
+                </div>
+
+                <button onclick="revealMessageWithEffects()" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 text-slate-950 font-black text-lg shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 mx-auto">
+                    <i class="fa-solid fa-envelope-open text-xl"></i>
+                    <span>افتحي رسالتكِ الآن 🌟</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- VIEW 3: REVEALED MESSAGE & TIPS CARD -->
+        <section id="messageRevealView" class="hidden space-y-6">
+            <div class="glass-card-light p-6 lg:p-10 rounded-3xl text-slate-800 space-y-6 relative border-4 border-pink-300 shadow-2xl text-right">
+                
+                <div class="flex justify-between items-center border-b border-purple-100 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center font-bold text-xl">💻</div>
+                        <div>
+                            <h4 id="revealedStudentName" class="text-xl font-black text-purple-900"></h4>
+                            <p class="text-xs text-purple-600 font-bold">بطلة ونجمة الحاسب والتقنية الرقمية 🌟</p>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-pink-100 text-pink-800">رسالتكِ التحفيزية 💌</span>
+                </div>
+
+                <div class="bg-gradient-to-br from-pink-50 to-purple-50 p-6 rounded-2xl border border-pink-100 space-y-3">
+                    <h5 class="font-extrabold text-purple-900 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-heart text-pink-500"></i>
+                        <span>كلمات التحفيز:</span>
+                    </h5>
+                    <p id="revealedPersonalMessage" class="text-slate-700 leading-loose text-base font-semibold"></p>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-50 to-blue-50 p-6 rounded-2xl border border-purple-100 space-y-3">
+                    <h5 class="font-extrabold text-purple-900 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-lightbulb text-yellow-500"></i>
+                        <span>نصيحة لمذاكرة الحاسب والتقنية:</span>
+                    </h5>
+                    <p id="revealedStudyTip" class="text-slate-700 leading-loose text-base font-semibold"></p>
+                </div>
+
+                <div class="bg-gradient-to-br from-pink-50 via-slate-50 to-purple-50 p-6 rounded-2xl border border-pink-200 space-y-5">
+                    <h5 class="font-black text-purple-900 text-lg flex items-center gap-2 border-b border-purple-200 pb-2">
+                        <i class="fa-solid fa-compass text-pink-600"></i>
+                        <span>دليل "خطوة بلا ضغط" للتفوق وتخفيف ضغط الاختبارات 🌸</span>
+                    </h5>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white/80 p-4 rounded-xl border border-purple-100 space-y-2">
+                            <h6 class="font-bold text-purple-900 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-clock text-purple-600"></i>
+                                <span>تنظيم الوقت:</span>
+                            </h6>
+                            <ul class="text-xs text-slate-700 space-y-1.5 list-disc list-inside leading-relaxed">
+                                <li>ضعي جدول مراجعة واقعيًا يوزع الوحدات النظرية على الأيام المتبقية.</li>
+                                <li>خصصي ٤٥ دقيقة للمراجعة ثم ١٠ دقائق راحة (تقنية بومودورو).</li>
+                                <li>راجعي أصعب المفاهيم في الوقت الذي يكون فيه تركيزك أعلى.</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white/80 p-4 rounded-xl border border-pink-100 space-y-2">
+                            <h6 class="font-bold text-pink-900 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-brain text-pink-600"></i>
+                                <span>المراجعة الفعّالة للنظري:</span>
+                            </h6>
+                            <ul class="text-xs text-slate-700 space-y-1.5 list-disc list-inside leading-relaxed">
+                                <li>ابدئي بتلخيص المفاهيم الأساسية قبل التفاصيل.</li>
+                                <li>استخدمي الخرائط الذهنية لربط المصطلحات والتعريفات ببعضها.</li>
+                                <li>حلّي نماذج أسئلة نظرية سابقة وتدربي على صياغة الإجابات.</li>
+                                <li>اشرحي المعلومة بصوت مرتفع أو لزميلة، فالتعليم يثبّت الفهم.</li>
+                                <li>استخدمي الألوان لتحديد المصطلحات المهمة والتعريفات الأساسية.</li>
+                                <li>افهمي المعلومة قبل حفظها، واربطي كل مفهوم بمثال من الواقع.</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white/80 p-4 rounded-xl border border-pink-100 space-y-2">
+                            <h6 class="font-bold text-pink-900 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-heart-pulse text-pink-600"></i>
+                                <span>الاستعداد النفسي والجسدي:</span>
+                            </h6>
+                            <ul class="text-xs text-slate-700 space-y-1.5 list-disc list-inside leading-relaxed">
+                                <li>نامي مبكرًا ليلة الاختبار ولا تسهري للمراجعة.</li>
+                                <li>تجنبي المقارنة بالآخرين وركزي على تقدمك.</li>
+                                <li>خذي استراحات قصيرة وماءً كافيًا أثناء المذاكرة.</li>
+                                <li>ثقي بنفسك؛ فالثقة نصف النتيجة.</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white/80 p-4 rounded-xl border border-blue-100 space-y-2">
+                            <h6 class="font-bold text-blue-900 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-pen-to-square text-blue-600"></i>
+                                <span>ليلة ويوم الاختبار:</span>
+                            </h6>
+                            <ul class="text-xs text-slate-700 space-y-1.5 list-disc list-inside leading-relaxed">
+                                <li>راجعي ملخصاتك فقط ولا تبدأي بموضوع جديد.</li>
+                                <li>اقرئي الأسئلة بتمعّن قبل الإجابة وابدئي بالأسهل.</li>
+                                <li>راجعي إجاباتك النظرية للتأكد من دقة المصطلحات والتعريفات.</li>
+                                <li>تنفسي بعمق وتذكري أنكِ مستعدة.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50/90 p-5 rounded-2xl border border-yellow-200 text-center space-y-2">
+                    <p class="text-sm font-black text-yellow-900 leading-relaxed">
+                        "أنا أؤمن بقدراتكِ، وأثق بأنكِ قادرة على تحقيق أجمل النتائج في عالم التقنية.<br>
+                        كوني مبدعة، واصنعي لنفسكِ مستقبلًا مشرقًا رقميًا.<br>
+                        <span class="text-pink-600">مدربتك تفخر بكِ دائمًا ❤️💻</span>"
+                    </p>
+                </div>
+
+                <div class="pt-4 text-center">
+                    <button onclick="finishSession()" class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-extrabold text-base shadow-lg hover:opacity-95 transition-all">
+                        شكرًا مدربتي ❤️
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- TRAINER ADMIN DASHBOARD MODAL -->
+    <div id="adminModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-card max-w-5xl w-full p-6 lg:p-8 rounded-3xl space-y-6 text-right max-h-[90vh] overflow-y-auto border border-pink-500/30">
+            
+            <div class="flex justify-between items-center border-b border-white/10 pb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-black text-white">لوحة المدربة أمل عبيد البلوي 👩‍🏫</h3>
+                        <p class="text-xs text-pink-200">الرقم الوظيفي: 8803278 | قاعدة بيانات Supabase السحابية</p>
+                    </div>
+                </div>
+                <button onclick="closeAdminModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-slate-900/70 p-4 rounded-2xl border border-purple-500/30 text-center">
+                    <span class="text-xs text-purple-200 font-bold block">إجمالي المتدربات المسجلات</span>
+                    <span id="totalStudentsCount" class="text-2xl font-black text-white">0</span>
+                </div>
+                <div class="bg-slate-900/70 p-4 rounded-2xl border border-emerald-500/30 text-center">
+                    <span class="text-xs text-emerald-300 font-bold block">قمن بفتح الرسالة</span>
+                    <span id="openedCount" class="text-2xl font-black text-emerald-400">0</span>
+                </div>
+                <div class="bg-slate-900/70 p-4 rounded-2xl border border-pink-500/30 text-center">
+                    <span class="text-xs text-pink-300 font-bold block">لم يفتحن بعد</span>
+                    <span id="unopenedCount" class="text-2xl font-black text-pink-400">0</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-between gap-3">
+                <input type="text" id="adminSearchInput" onkeyup="renderAdminTable()" placeholder="ابحثي عن اسم أو رقم تدريبي..." class="px-4 py-2.5 rounded-xl bg-slate-900 border border-purple-500/40 text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 sm:w-64">
+                <div class="flex gap-2">
+                    <button onclick="exportDataCSV()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-file-excel"></i>
+                        <span>تصدير ملف Excel (CSV) لكل المتدربات</span>
+                    </button>
+                    <button onclick="resetAllStatus()" class="px-4 py-2.5 rounded-xl bg-red-600/80 hover:bg-red-600 text-white text-xs font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>حذف الكل من السحابة</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto rounded-2xl border border-white/10">
+                <table class="w-full text-sm text-right text-pink-100">
+                    <thead class="bg-slate-900/90 text-xs font-bold text-pink-300 border-b border-white/10">
+                        <tr>
+                            <th class="p-3">#</th>
+                            <th class="p-3">اسم المتدربة</th>
+                            <th class="p-3">الرقم التدريبي</th>
+                            <th class="p-3">الحالة</th>
+                            <th class="p-3">تاريخ ووقت الفتح</th>
+                            <th class="p-3 text-center">إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody" class="divide-y divide-white/5 bg-slate-900/40"></tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TRAINER AUTH MODAL -->
+    <div id="adminAuthModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card max-w-md w-full p-6 rounded-3xl space-y-4 text-center border border-pink-500/30">
+            <h4 class="text-xl font-extrabold text-white">تسجيل دخول المدربة 🔐</h4>
+            <p class="text-xs text-pink-200">أدخلي اسم المدربة والرقم الوظيفي للدخول للوحة</p>
+            <div class="space-y-3 text-right">
+                <div>
+                    <label class="block text-xs font-bold text-pink-200 mb-1">اسم المدربة:</label>
+                    <input type="text" id="trainerNameInput" value="amal" placeholder="amal" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-purple-500/40 text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-pink-200 mb-1">الرقم الوظيفي:</label>
+                    <input type="password" id="trainerPasswordInput" placeholder="••••••••" class="w-full text-center tracking-widest px-4 py-3 rounded-xl bg-slate-900 border border-purple-500/40 text-yellow-300 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500">
+                </div>
+            </div>
+            <div class="flex gap-2 pt-2">
+                <button onclick="verifyTrainerAuth()" class="flex-1 py-3 rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-bold text-sm">دخول اللوحة</button>
+                <button onclick="closeAdminAuthModal()" class="px-4 py-3 rounded-xl bg-white/10 text-white text-sm">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM ALERT MODAL -->
+    <div id="customAlertModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card max-w-md w-full p-6 rounded-3xl space-y-4 text-center border border-yellow-400/40">
+            <div class="w-14 h-14 rounded-full bg-yellow-400/20 text-yellow-300 flex items-center justify-center mx-auto text-2xl">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h4 id="alertTitle" class="text-lg font-black text-white">تنـبيـه</h4>
+            <p id="alertMessage" class="text-sm text-pink-100 leading-relaxed"></p>
+            <button onclick="closeCustomAlert()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold text-sm">فهمت ذلك ❤️</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 w-full py-4 text-center border-t border-white/20 text-xs text-pink-100 glass-card">
+        <p>مبادرة "خطوة بلا ضغط" 💻🌸 | إعداد المدربة أمل عبيد البلوي | الكلية التقنية الرقمية للبنات بتبوك</p>
+    </footer>
+
+    <script>
+        // إعدادات Supabase المدمجة مباشرة
+        const SUPABASE_URL = "https://fbmfrbprnjsunnyduoly.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_igbVuxnbukfv0vDV-OLsWw_lFkOPZ0r";
+        
+        let supabaseClient = null;
+        try {
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } catch (e) {
+            console.error("Supabase Initialization Error", e);
+        }
+
+        const motivationMessages = [
+            "عزيزتي، ثقي أن كل مفهوم فهمتِه بعمق سيتذكركِ في الاختبار. أنتِ أقوى مما تظنين، وأذكى مما تتخيلين. اهدئي وراجعي بثقة.",
+            "لا تدعي القلق يسرق منكِ معرفتك. أنتِ مستعدة أكثر مما تعتقدين، فقط ابدئي المراجعة بخطوة صغيرة وستجدين نفسك تتقدمين.",
+            "كل واحدة منكنّ تملك عقلاً مبدعاً يستحق أن يُظهر ما تعلمه. ثقي بنفسك، فرقتك بين النجاح والتميز هي ثقتك.",
+            "أنتِ لست بحاجة أن تكوني الأفضل في كل شيء، فقط أن تكوني أفضل من الأمس. راجعي اليوم بتركيز، وستفخرين بنفسك غداً.",
+            "تذكري أن كل عالمة ومبتكرة بدأت بخطوة صغيرة. أنتِ على الطريق الصحيح، فقط استمري بثقة وإصرار.",
+            "لا تقارني نفسك بأحد؛ لكل واحدة رحلتها الخاصة. ركزي على فهمك أنتِ، وتقدمك أنتِ، ونجاحك أنتِ.",
+            "أنتِ قادرة على فهم أصعب المفاهيم إذا أعطيتِها وقتك وتركيزك. الثقة بالنفس هي أول خطوة نحو التميز.",
+            "عندما تشعرين أن المادة كثيرة، تذكري أن كل درس تراجعينه هو خطوة تقربك من هدفك. أنتِ أقدر مما تظنين.",
+            "ثقي أن اجتهادك لن يذهب سدى. كل دقيقة مراجعة اليوم هي بذرة نجاح تُثمر غداً بإذن الله.",
+            "أنتِ نجمة تخصصك، ولا أحد يستطيع أن يأخذ مكانك. راجعي بثقة، وادخلي الاختبار وأنتِ مؤمنة بقدراتك."
+        ];
+
+        const studyTips = [
+            "ضعي جدول مراجعة واقعيًا يوزع الوحدات النظرية على الأيام المتبقية، واستخدمي الخرائط الذهنية لربط المصطلحات ببعضها.",
+            "خصصي ٤٥ دقيقة للمراجعة ثم ١٠ دقائق راحة (تقنية بومودورو)، وراجعي أصعب المفاهيم في الوقت الذي يكون فيه تركيزك أعلى.",
+            "حلّي نماذج أسئلة نظرية سابقة وتدربي على صياغة الإجابات، واشرحي المعلومة بصوت مرتفع أو لزميلة لتبسيط الفهم.",
+            "استخدمي الألوان لتحديد المصطلحات المهمة والتعريفات الأساسية، وافهمي المعلومة قبل حفظها واربطيها بمثال من الواقع.",
+            "نامي مبكرًا ليلة الاختبار ولا تسهري للمراجعة، وتجنبي المقارنة بالآخرين وركزي على تقدمك الشخصي.",
+            "اقرئي الأسئلة بتمعّن قبل الإجابة وابدئي بالأسهل، وتنفسي بعمق وتذكري دائمًا أنكِ مستعدة وقادرة على التميز."
+        ];
+
+        let studentsLogs = [];
+        let currentStudent = null;
+
+        const TRAINER_NAME = "amal";
+        const TRAINER_ID = "8803278";
+
+        window.onload = function() {
+            fetchStudentsFromCloud();
+        };
+
+        // جلب البيانات من Supabase سحابياً
+        async function fetchStudentsFromCloud() {
+            if (!supabaseClient) return;
+            try {
+                const { data, error } = await supabaseClient.from('students').select('*');
+                if (!error && data) {
+                    studentsLogs = data;
+                }
+                if (!document.getElementById('adminModal').classList.contains('hidden')) {
+                    renderAdminTable();
+                }
+            } catch (err) {
+                console.error("Fetch error", err);
+            }
+        }
+
+        async function handleStudentLogin() {
+            const nameInput = document.getElementById('studentNameInput').value.trim();
+            const codeInput = document.getElementById('studentCodeInput').value.trim();
+
+            if (!nameInput) {
+                showCustomAlert("تنبيه", "يرجى كتابة اسمكِ الكريم.");
+                return;
+            }
+            if (!codeInput) {
+                showCustomAlert("تنبيه", "يرجى إدخال رقمك التدريبي.");
+                return;
+            }
+
+            // تحديث البيانات من السحابة أولاً للتأكد
+            await fetchStudentsFromCloud();
+
+            let studentRecord = studentsLogs.find(s => s.code === codeInput);
+
+            if (studentRecord) {
+                if (studentRecord.opened) {
+                    showCustomAlert("رسالة خاصة 🛑", "عذرًا يا نجمة الحاسب، لقد قمتِ بفتح رسالتكِ مسبقاً. استمري في تألقكِ ودعي القلق خلفكِ ❤️");
+                    return;
+                }
+            } else {
+                const randomMsg = motivationMessages[Math.floor(Math.random() * motivationMessages.length)];
+                const randomTip = studyTips[Math.floor(Math.random() * studyTips.length)];
+
+                const now = new Date();
+                const dateFormatted = now.toLocaleDateString('ar-SA') + ' - ' + now.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
+
+                studentRecord = {
+                    name: nameInput,
+                    code: codeInput,
+                    message: randomMsg,
+                    tip: randomTip,
+                    opened: true,
+                    opened_at: dateFormatted
+                };
+
+                // إرسال البيانات وحفظها في جدول Supabase
+                if (supabaseClient) {
+                    const { error } = await supabaseClient.from('students').insert([studentRecord]);
+                    if (error) {
+                        console.error("Insert error:", error);
+                        // لو الرقم التدريبي مكرر في قاعدة البيانات
+                        if (error.code === '23505') {
+                            showCustomAlert("تنبيه", "هذا الرقم التدريبي مسجل مسبقاً.");
+                            return;
+                        }
+                    }
+                }
+                studentsLogs.push(studentRecord);
+            }
+
+            currentStudent = studentRecord;
+            document.getElementById('currentStudentNameDisplay').textContent = currentStudent.name;
+            switchView('giftStageView');
+        }
+
+        function revealMessageWithEffects() {
+            if (!currentStudent) return;
+
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 140,
+                    spread: 95,
+                    origin: { y: 0.6 },
+                    colors: ['#bf009f', '#532eee', '#5935d0', '#facc15']
+                });
+            }
+
+            document.getElementById('revealedStudentName').textContent = currentStudent.name;
+            document.getElementById('revealedPersonalMessage').textContent = currentStudent.message;
+            document.getElementById('revealedStudyTip').textContent = currentStudent.tip;
+
+            setTimeout(() => { switchView('messageRevealView'); }, 300);
+        }
+
+        function finishSession() {
+            currentStudent = null;
+            document.getElementById('studentNameInput').value = '';
+            document.getElementById('studentCodeInput').value = '';
+            switchView('homeView');
+            showCustomAlert("بالتوفيق والتميز 🌸", "أتمنى لكِ دوام التفوق والإبداع في مسيرتكِ التقنية!");
+        }
+
+        function switchView(viewId) {
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('giftStageView').classList.add('hidden');
+            document.getElementById('messageRevealView').classList.add('hidden');
+            document.getElementById(viewId).classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function openAdminAuthModal() {
+            await fetchStudentsFromCloud();
+            document.getElementById('adminAuthModal').classList.remove('hidden');
+        }
+
+        function closeAdminAuthModal() {
+            document.getElementById('adminAuthModal').classList.add('hidden');
+            document.getElementById('trainerPasswordInput').value = '';
+        }
+
+        function verifyTrainerAuth() {
+            const name = document.getElementById('trainerNameInput').value.trim().toLowerCase();
+            const pass = document.getElementById('trainerPasswordInput').value.trim();
+
+            if (name === TRAINER_NAME && pass === TRAINER_ID) {
+                closeAdminAuthModal();
+                renderAdminTable();
+                document.getElementById('adminModal').classList.remove('hidden');
+            } else {
+                showCustomAlert("خطأ في التحقق ❌", "اسم المدربة أو الرقم الوظيفي غير صحيح. يرجى التأكد من البيانات.");
+            }
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.add('hidden');
+        }
+
+        function renderAdminTable() {
+            const tbody = document.getElementById('adminTableBody');
+            const searchVal = document.getElementById('adminSearchInput').value.toLowerCase();
+            tbody.innerHTML = '';
+
+            let openedCount = 0;
+            const filtered = studentsLogs.filter(s => 
+                s.name.toLowerCase().includes(searchVal) || s.code.includes(searchVal)
+            );
+
+            studentsLogs.forEach(s => { if (s.opened) openedCount++; });
+
+            document.getElementById('totalStudentsCount').textContent = studentsLogs.length;
+            document.getElementById('openedCount').textContent = openedCount;
+            document.getElementById('unopenedCount').textContent = studentsLogs.length - openedCount;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">لم تقم أي متدربة بتسجيل البيانات بعد في السحابة</td></tr>`;
+                return;
+            }
+
+            filtered.forEach((student, index) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-white/5 transition-colors";
+                
+                const statusBadge = student.opened 
+                    ? `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">تم الفتح ✔️</span>`
+                    : `<span class="px-2.5 py-1 rounded-full text-xs font-bold bg-pink-500/20 text-pink-300 border border-pink-500/30">لم تفتح بعد ⏳</span>`;
+
+                tr.innerHTML = `
+                    <td class="p-3 text-xs font-bold text-slate-400">${index + 1}</td>
+                    <td class="p-3 font-semibold text-white">${student.name}</td>
+                    <td class="p-3 text-xs text-pink-200 font-mono">${student.code}</td>
+                    <td class="p-3">${statusBadge}</td>
+                    <td class="p-3 text-xs text-pink-200">${student.opened_at || '-'}</td>
+                    <td class="p-3 text-center">
+                        <button onclick="resetStudentStatus('${student.code}')" title="حذف" class="px-2.5 py-1 rounded-lg bg-red-600/50 hover:bg-red-600 text-white text-xs font-bold">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function resetStudentStatus(code) {
+            if (confirm("هل أنتِ متأكدة من حذف هذه المتدربة من السحابة؟")) {
+                if (supabaseClient) {
+                    await supabaseClient.from('students').delete().eq('code', code);
+                    await fetchStudentsFromCloud();
+                    renderAdminTable();
+                }
+            }
+        }
+
+        async function resetAllStatus() {
+            if (confirm("تحذير: هل أنتِ متأكدة من حذف جميع سجلات المتدربات نهائياً من قاعدة البيانات؟")) {
+                if (supabaseClient) {
+                    await supabaseClient.from('students').delete().neq('id', 0); // حذف الكل
+                    await fetchStudentsFromCloud();
+                    renderAdminTable();
+                }
+            }
+        }
+
+        function exportDataCSV() {
+            if (studentsLogs.length === 0) {
+                showCustomAlert("تنبيه", "لا توجد سجلات حالية لتصديرها.");
+                return;
+            }
+
+            let csvContent = "\uFEFFالرقم,اسم المتدربة,الرقم التدريبي,حالة الفتح,تاريخ ووقت الفتح\n";
+
+            studentsLogs.forEach((s, idx) => {
+                const statusStr = s.opened ? "تم الفتح" : "لم تفتح";
+                const dateStr = s.opened_at ? s.opened_at.replace(/,/g, ' ') : "-";
+                csvContent += `"${idx + 1}","${s.name}","${s.code}","${statusStr}","${dateStr}"\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `تقرير_مبادرة_خطوة_بلا_ضغط_شامل_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function showCustomAlert(title, message) {
+            document.getElementById('alertTitle').textContent = title;
+            document.getElementById('alertMessage').textContent = message;
+            document.getElementById('customAlertModal').classList.remove('hidden');
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('customAlertModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
